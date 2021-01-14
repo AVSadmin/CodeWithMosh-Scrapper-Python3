@@ -23,10 +23,16 @@ def download(session, link):
                 continue
             lect = session.get(domain+lecture.attrs.get('href'))
             htp = bs(lect.text,'html5lib')
-            video = session.get(htp.find('div',{'class': 'video-options'}).a.attrs.get('href'))
-            with open(video.headers.get("X-File-Name"),'wb') as f:
-                print("\t#->",video.headers.get("X-File-Name"))
-                f.write(video.content)
+            fileurl = htp.find('div',{'class': 'video-options'}).a.attrs.get('href')
+            video_check = session.head(fileurl)
+            video = session.get(fileurl)
+            if(not os.path.exists(video_check.headers.get("X-File-Name"))):
+                video = session.get(fileurl)
+                with open(video.headers.get("X-File-Name"),'wb') as f:
+                    print("\t#->",video.headers.get("X-File-Name"))
+                    f.write(video.content)
+            else:
+                print("\t#->",video.headers.get("X-File-Name"),"(skipped)")
         
         os.chdir("../")
 def main():
