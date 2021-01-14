@@ -31,7 +31,7 @@ def download(session, link):
                     print("\t#->",video.headers.get("X-File-Name"))
                     f.write(video.content)
             else:
-                print("\t#->",video.headers.get("X-File-Name"),"(skipped)")
+                print("\t#->",video_check.headers.get("X-File-Name"),"(skipped)")
         
         os.chdir("../")
 def main():
