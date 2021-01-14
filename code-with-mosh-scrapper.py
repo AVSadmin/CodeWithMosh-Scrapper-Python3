@@ -25,7 +25,7 @@ def download(session, link):
             htp = bs(lect.text,'html5lib')
             fileurl = htp.find('div',{'class': 'video-options'}).a.attrs.get('href')
             video_check = session.head(fileurl)
-            if(not os.path.exists(video_check.headers.get("X-File-Name"))):
+            if(not os.path.exists(video_check.headers.get("X-File-Name")) or not os.stat(video_check.headers.get("X-File-Name")).st_size==int(video_check.headers.get("Content-Length"))):
                 video = session.get(fileurl)
                 with open(video.headers.get("X-File-Name"),'wb') as f:
                     print("\t#->",video.headers.get("X-File-Name"))
